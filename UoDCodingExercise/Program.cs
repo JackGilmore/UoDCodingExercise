@@ -10,20 +10,40 @@ namespace UoDCodingExercise
         {
             DeckOfCards deck = new DeckOfCards();
 
+            Console.WriteLine("Initial deck of cards:");
             Console.WriteLine(deck.ToString());
+            Console.ReadLine();
 
+            Console.Clear();
+
+            Console.WriteLine("Shuffled deck of cards:");
             deck.Shuffle();
-
-            Console.WriteLine("=====");
-
             Console.WriteLine(deck.ToString());
+            Console.ReadLine();
 
+            Console.Clear();
+
+            Console.WriteLine("Sorted deck of cards (by suit and then by rank)");
+            deck.Sort();
+            Console.WriteLine(deck.ToString());
+            Console.ReadLine();
+
+            Console.Clear();
+
+
+            Console.WriteLine("Drawing top card:");
+            PlayingCard topCard = deck.DealTopCard();
+            Console.WriteLine(topCard.ToString());
+            Console.ReadLine();
+
+            Console.Clear();
         }
     }
 
     public class DeckOfCards
     {
         public PlayingCard[] PlayingCards { get; set; }
+        public int CardIndex { get; set; }
 
         public DeckOfCards()
         {
@@ -38,8 +58,7 @@ namespace UoDCodingExercise
             PlayingCards = new PlayingCard[deckSize];
 
             // Index to track where we are inserting cards into the deck
-            // TODO: Consider making this a prop so we can track what the top of the deck is
-            int cardIndex = 0;
+            CardIndex = 0;
 
             // Loop through all suits (index i) and ranks (index j)                        
             for (int i = 0; i < suitCount; i++)
@@ -47,11 +66,13 @@ namespace UoDCodingExercise
                 for (int j = 0; j < rankCount; j++)
                 {
                     // Insert a new card into the deck with the current indexed suit and rank
-                    PlayingCards[cardIndex] = new PlayingCard((PlayingCard.CardRank)j, (PlayingCard.CardSuit)i);
-                    // Increment card index to move onto the next array slot
-                    cardIndex++;
+                    PlayingCards[CardIndex] = new PlayingCard((PlayingCard.CardRank)j, (PlayingCard.CardSuit)i);
+
+                    CardIndex++;
                 }
             }
+
+            CardIndex--;
         }
         /// <summary>
         /// Using the Fisher-Yates shuffle method, shuffle the deck of cards
@@ -72,6 +93,28 @@ namespace UoDCodingExercise
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Sort()
+        {
+            PlayingCards = PlayingCards.OrderBy(s => s.Suit).ThenBy(r => r.Rank).ToArray();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public PlayingCard DealTopCard()
+        {
+            PlayingCard topCard = PlayingCards[CardIndex];
+
+            return topCard;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Join("\n", PlayingCards.Select(x => x.ToString()));
@@ -88,6 +131,10 @@ namespace UoDCodingExercise
             Suit = _suit;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return Rank + " of " + Suit;
@@ -118,8 +165,4 @@ namespace UoDCodingExercise
             King
         }
     }
-
-
-
-
 }
