@@ -43,8 +43,11 @@ namespace UoDCodingExercise
     public class DeckOfCards
     {
         public PlayingCard[] PlayingCards { get; set; }
-        public int CardIndex { get; set; }
+        private int CardIndex { get; set; }
 
+        /// <summary>
+        /// Initialize our deck of cards with a card of each rank and suit
+        /// </summary>
         public DeckOfCards()
         {
             // Get the amount of values in the card suit and rank enums
@@ -68,10 +71,12 @@ namespace UoDCodingExercise
                     // Insert a new card into the deck with the current indexed suit and rank
                     PlayingCards[CardIndex] = new PlayingCard((PlayingCard.CardRank)j, (PlayingCard.CardSuit)i);
 
+                    // Increment index of where we are in the deck
                     CardIndex++;
                 }
             }
 
+            // Decrement index by 1 to get to the top of the deck
             CardIndex--;
         }
         /// <summary>
@@ -94,30 +99,50 @@ namespace UoDCodingExercise
         }
 
         /// <summary>
-        /// 
+        /// Sorts the deck in ascending order by suit and then by rank
         /// </summary>
         public void Sort()
         {
-            PlayingCards = PlayingCards.OrderBy(s => s.Suit).ThenBy(r => r.Rank).ToArray();
+            PlayingCards = PlayingCards
+                .OrderBy(s => s.Suit)
+                .ThenBy(r => r.Rank)
+                .ToArray();
         }
 
         /// <summary>
-        /// 
+        /// Outputs a list of cards in the deck with one card on each line
         /// </summary>
-        public PlayingCard DealTopCard()
-        {
-            PlayingCard topCard = PlayingCards[CardIndex];
-
-            return topCard;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+        /// <returns>A multi-line string of PlayingCard strings</returns>
         public override string ToString()
         {
             return string.Join("\n", PlayingCards.Select(x => x.ToString()));
+        }
+
+        /// <summary>
+        /// Removes the top card from the deck and deals it
+        /// </summary>
+        /// <returns>The top card from the deck as a PlayingCard object</returns>
+        public PlayingCard DealTopCard()
+        {
+            // Check that we still have cards in the deck first
+            if (CardIndex >= 0)
+            {
+                // Get the top card in the list of current cards
+                PlayingCard topCard = PlayingCards[CardIndex];
+
+                // Set that entry in the array to be null as we have taken the card out
+                PlayingCards[CardIndex] = null;
+
+                // Decrement the card index by 1 to move to the next card which is now the top
+                CardIndex--;
+
+                // Return the top card
+                return topCard;
+            }
+            else
+            {
+                throw new Exception("There are no cards left in the deck");
+            }
         }
     }
 
@@ -130,11 +155,10 @@ namespace UoDCodingExercise
             Rank = _rank;
             Suit = _suit;
         }
-
         /// <summary>
-        /// 
+        /// Outputs the card's rank and suit in the format "Rank of Suit" as is traditional with cards
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A single line string with the rank and suit of a card</returns>
         public override string ToString()
         {
             return Rank + " of " + Suit;
