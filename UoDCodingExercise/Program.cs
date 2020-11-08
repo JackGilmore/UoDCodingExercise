@@ -79,6 +79,16 @@ namespace UoDCodingExercise
             // Decrement index by 1 to get to the top of the deck
             CardIndex--;
         }
+
+        /// <summary>
+        /// Outputs a list of cards in the deck with one card on each line
+        /// </summary>
+        /// <returns>A multi-line string of PlayingCard strings</returns>
+        public override string ToString()
+        {
+            return string.Join("\n", PlayingCards.Select(x => x.ToString()));
+        }
+
         /// <summary>
         /// Using the Fisher-Yates shuffle method, shuffle the deck of cards
         /// </summary>
@@ -107,15 +117,6 @@ namespace UoDCodingExercise
                 .OrderBy(s => s.Suit)
                 .ThenBy(r => r.Rank)
                 .ToArray();
-        }
-
-        /// <summary>
-        /// Outputs a list of cards in the deck with one card on each line
-        /// </summary>
-        /// <returns>A multi-line string of PlayingCard strings</returns>
-        public override string ToString()
-        {
-            return string.Join("\n", PlayingCards.Select(x => x.ToString()));
         }
 
         /// <summary>
